@@ -1,0 +1,21 @@
+name: Send survey result
+
+on:
+  repository_dispatch:
+    types: [survey-submission]
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Email result to Karen
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "TrendLife Style Signal 回覆"
+          to: karen_shen@trendmicro.com
+          from: ${{ secrets.MAIL_USERNAME }}
+          body: ${{ toJSON(github.event.client_payload) }}
